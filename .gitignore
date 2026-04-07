@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+
+# Secrets / env
+.env
+venv/
+
+# macOS
+.DS_Store
+
+# Local DB / state / outputs
+*.db
+.etl_state.json
+spark_output/
+
+# Optional generated data
+*.csv
