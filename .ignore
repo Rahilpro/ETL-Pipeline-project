@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+venv/
+
+# Mac
+.DS_Store
+
+# Database
+*.db
+
+# Airflow / state
+.etl_state.json
+
+# Spark output
+spark_output/
+
+# CSV (optional - if large)
+*.csv

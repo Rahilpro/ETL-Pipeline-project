@@ -1,0 +1,8 @@
+requests
+tenacity
+pydantic
+sqlalchemy
+psycopg2-binary
+python-dotenv
+pyspark
+apache-airflow==3.0.6

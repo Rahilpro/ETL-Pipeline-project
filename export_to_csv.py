@@ -1,3 +1,4 @@
+# export_to_csv.py — fixed version
 import sqlite3
 import csv
 import os
@@ -12,7 +13,7 @@ cols = [d[0] for d in cursor.description]
 
 output = os.path.join(os.path.dirname(os.path.abspath(__file__)), "github_repos.csv")
 with open(output, "w", newline="", encoding="utf-8") as f:
-    writer = csv.writer(f)
+    writer = csv.writer(f, quoting=csv.QUOTE_ALL)  # ← quotes every field
     writer.writerow(cols)
     writer.writerows(rows)
 

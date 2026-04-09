@@ -24,6 +24,8 @@ def get_spark():
 
 def run_transforms():
     spark = get_spark()
+    print("Spark UI:", spark.sparkContext.uiWebUrl)
+
     spark.sparkContext.setLogLevel("WARN")  # suppress noisy INFO logs
 
     db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "etl_data.db")
@@ -54,6 +56,17 @@ def run_transforms():
         .withColumn("updated_at", F.to_timestamp("updated_at"))
         .withColumn("created_at", F.to_timestamp("created_at"))
     )
+    # inside run_transforms(), after the enriched DataFrame is built, add:
+    enriched = enriched.withColumn(
+        "repo_age_days",
+        F.datediff(F.current_date(), F.col("created_at"))
+    )
+    enriched.groupBy("language") \
+    .agg(F.round(F.avg("repo_age_days")).alias("avg_age_days")) \
+    .orderBy(F.desc("avg_age_days")) \
+    .show()
+        
+    
 
     # ── Transform 2: language-level aggregations ───────────────────
     lang_stats = (
@@ -94,5 +107,15 @@ def run_transforms():
 
     spark.stop()
 
+ 
+
 if __name__ == "__main__":
     run_transforms()
+    spark = get_spark()
+    lang_stats = spark.read.parquet("spark_output/lang_stats")
+    print("Read back from Parquet:")
+    lang_stats.show()
+    spark.stop()
+
+
+
